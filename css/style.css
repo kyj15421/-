@@ -3,7 +3,7 @@
    ───────────────────────────────────────────── */
 :root {
   --wine: #811131;
-  --rose: #b58b7a;
+  --rose: #331e22;
   --wine-2: #8b2332;
   --brown: #402c2f;
   --brown-2: #331e22;
@@ -87,9 +87,10 @@ ul, ol { list-style: none; }
 .gnb__sub a:hover, .gnb__sub a:focus-visible { color: var(--wine); }
 /* 메뉴 영역에 마우스를 올리면 모든 하위 메뉴가 흰 패널에 함께 펼쳐짐 */
 .hd.is-open { color: #fff; }
-.hd.is-open .logo img { filter: brightness(0) invert(1); } /* 로즈골드 위에서는 흰 로고 */
+/* 딥 브라운 위: 샴페인 골드 로고 그대로 */
 .hd.is-open::before { height: calc(var(--hd) + var(--drop, 260px)); }
 .hd.is-open .logo--color { display: flex; }
+.hd.is-open .gnb__list > li > a::after { background: #e9c89f; }
 .hd.is-open .logo--white { display: none; }
 .hd.is-open .gnb__sub { opacity: 1; visibility: visible; transition: opacity .35s .12s; }
 
