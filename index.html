@@ -331,12 +331,11 @@
             <p class="field__error" id="date-error"></p>
           </div>
           <div class="field">
-            <label for="type">관심 주택형</label>
+            <label for="type">관심타입</label>
             <select id="type" name="type">
-              <option value="">아직 정하지 않았어요</option>
-              <option>84A</option><option>84B</option><option>102</option><option>114</option><option>119A</option><option>119B</option>
-              <option>121</option><option>135A</option><option>135B</option><option>139A</option><option>139B-1</option><option>139B-2</option>
-              <option>139C</option><option>139D</option><option>166</option><option>211P</option><option>233P</option>
+              <option>84㎡이상 (구 30평형)</option>
+              <option>114㎡이상 (구 40평형)</option>
+              <option>135㎡이상 (구 50평형)</option>
             </select>
           </div>
         </div>
@@ -367,7 +366,10 @@
         <h3 class="done__title">방문 예약이 접수되었습니다</h3>
         <p class="done__text" id="done-text"></p>
         <p>담당자가 영업일 기준 하루 안에 전화로 예약을 확정해 드립니다.</p>
-        <button class="done__again" type="button" id="reserve-again">다른 일정으로 예약하기</button>
+        <div class="done__acts">
+          <button class="done__again" type="button" id="reserve-again" data-close>이어서 관람하기</button>
+          <a class="done__again done__unit" href="unit.html">평형대 확인하기</a>
+        </div>
       </div>
       <button class="rsv__close" type="button" data-close><span class="sr-only">닫기</span></button>
     </div>

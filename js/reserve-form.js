@@ -90,5 +90,6 @@ const FORMSPREE_ID = "xdekbjpe";
     e.preventDefault(); e.stopPropagation();
     target[a.dataset.key]().focus();
   });
-  document.getElementById("reserve-again").addEventListener("click", () => { form.reset(); done.hidden = true; form.hidden = false; nameInput.focus(); });
+  // 이어서 관람하기: 창은 main.js(data-close)가 닫고, 여기서는 다음 예약을 위해 폼을 처음 상태로 되돌림
+  document.getElementById("reserve-again").addEventListener("click", () => { form.reset(); done.hidden = true; form.hidden = false; });
 })();

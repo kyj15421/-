@@ -452,8 +452,11 @@ html:not(.js) .premium__tit, html:not(.js) .premium__viewport { opacity: 1; tran
 .done__title { font-size: 26px; font-weight: 700; letter-spacing: -1px; }
 .done__text { font-size: 17px; }
 .done p:last-of-type { color: #888; }
-.done__again { justify-self: start; margin-top: 14px; padding: 13px 22px; border: 1px solid var(--brown-2); font-weight: 600; }
+.done__acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.done__again { padding: 13px 22px; border: 1px solid var(--brown-2); font-weight: 600; transition: background-color .2s, color .2s, border-color .2s; }
 .done__again:hover { background: var(--brown-2); color: #fff; }
+.done__unit { background: var(--wine-2); border-color: var(--wine-2); color: #fff; }
+.done__unit:hover { background: var(--wine); border-color: var(--wine); }
 
 /* ── 1400px 이하 ──────────────────────────── */
 @media (max-width: 1400px) {
