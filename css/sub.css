@@ -83,7 +83,7 @@ body.sub { background: #fff; color: #222; }
   content: ""; position: absolute; inset: 0; background: url(../images/pattern-light.png); opacity: .55;
 }
 .stop::after { /* 오른쪽 큰 엠블럼 */
-  content: ""; position: absolute; right: 7%; bottom: -40px; width: 300px; aspect-ratio: 600 / 374;
+  content: ""; position: absolute; right: 7%; bottom: 22px; width: 300px; aspect-ratio: 600 / 374;
   background: url(../images/logo-emblem-gold.png) center / contain no-repeat; opacity: .16;
   animation: stopEmblem 1.6s var(--ease) both;
 }
@@ -235,7 +235,7 @@ body.sub { background: #fff; color: #222; }
 /* ── 반응형 ── */
 @media (max-width: 1023px) {
   .stop { height: 220px; padding-top: 50px; }
-  .stop::after { width: 180px; right: -20px; }
+  .stop::after { width: 180px; right: -20px; bottom: 14px; }
   .stop__en { font-size: 2rem; }
   .sub-wrap { padding-bottom: 90px; }
   .snb ul { display: flex; overflow-x: auto; scrollbar-width: none; }
