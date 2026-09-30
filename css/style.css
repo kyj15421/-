@@ -69,8 +69,8 @@ ul, ol { list-style: none; }
 .hd__logo { flex: none; }
 .hd__logo a { display: block; }
 .logo { display: flex; align-items: center; gap: 8px; }
-.logo img:first-child { height: 20px; width: auto; }
-.logo img:last-child { height: 15px; width: auto; }
+.logo img:first-child { height: 24px; width: auto; }
+.logo img:last-child { height: 18px; width: auto; }
 .logo--white { display: none; }
 .hd.is-w .logo--color { display: none; }
 .hd.is-w .logo--white { display: flex; }
@@ -105,8 +105,8 @@ ul, ol { list-style: none; }
 .hd__yt:hover span, .hd__yt:focus-visible span { max-width: 160px; margin-left: 9px; opacity: 1; }
 .hd__bar { width: 1px; height: 14px; background: currentColor; opacity: .3; }
 /* 대표번호: 와인색 둥근 네모 안에 흰 글씨 (모바일 전화 버튼과 같은 모양) */
-.hd__tel { display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; border-radius: 11px; background: var(--wine-2); color: #fff; font-size: 22px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; box-shadow: 0 4px 14px rgba(60, 10, 20, .2); }
-.hd__tel svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.hd__tel { display: flex; align-items: center; gap: 8px; height: 39px; padding: 0 15px; border-radius: 9px; background: var(--wine-2); color: #fff; font-size: 19px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; box-shadow: 0 4px 14px rgba(60, 10, 20, .2); }
+.hd__tel svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .hd__call { display: none; }
 .hd__menu { position: relative; width: 44px; height: 44px; margin-left: 26px; margin-right: -10px; }
 .hd__menu i { position: absolute; right: 10px; height: 2px; background: currentColor; transition: width .3s var(--ease); }
@@ -471,6 +471,8 @@ html:not(.js) .premium__tit, html:not(.js) .premium__viewport { opacity: 1; tran
   .hd.is-solid .logo--color { display: flex; } .hd.is-solid .logo--white { display: none; }
   .gnb, .hd__yt, .hd__bar { display: none; }
   /* 대표번호: 와인색 버튼, 누르면 바로 전화 연결 (PC용 번호 글자는 숨김) */
+  .logo img:first-child { height: 20px; }
+  .logo img:last-child { height: 15px; }
   .hd__tel { display: none; }
   .hd__call { position: relative; display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-radius: 9px; background: var(--wine-2); color: #fff; font-size: 14px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; box-shadow: 0 3px 10px rgba(60, 10, 20, .22); transition: background-color .2s, transform .2s; }
   .hd__call::after { content: ""; position: absolute; inset: -4px 0; } /* 누르는 영역 44px 확보 */
@@ -613,15 +615,15 @@ input[type="date"] { cursor: pointer; }
   .hd__util { gap: 16px; }
   .hd__yt { height: 42px; padding: 0 9px; }
   .hd__yt svg { width: 26px; height: 26px; }
-  .hd__tel { height: 40px; padding: 0 14px; border-radius: 10px; font-size: 18px; gap: 7px; }
-  .hd__tel svg { width: 17px; height: 17px; }
+  .hd__tel { height: 34px; padding: 0 12px; border-radius: 8px; font-size: 15.5px; gap: 6px; }
+  .hd__tel svg { width: 14.5px; height: 14.5px; }
   .hd__menu { margin-left: 8px; }
 }
 @media (min-width: 1024px) and (max-width: 1200px) {
   .gnb__list > li { width: 92px; }
   .gnb__list > li > a { font-size: 15px; }
   .hd__bar { display: none; }
-  .hd__tel { height: 36px; padding: 0 11px; font-size: 16px; }
+  .hd__tel { height: 31px; padding: 0 9px; font-size: 13.5px; }
 }
 /* 휴대폰·태블릿: 화면 전환 시 사진 확대→축소 연출 제거 (버벅임 방지) */
 @media (max-width: 1023px) {
