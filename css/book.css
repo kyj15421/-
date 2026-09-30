@@ -1,0 +1,196 @@
+/* 주택형 안내: 책장 넘김 (v2에서 가져와 이 사이트 색으로 조정) */
+.ubook { --forest: #331e22; --brass: #a27d5c; --paper: #f6f2ec; --ink: #2b2426; --grey: #8c8385; --line: #e3ddd4; --hd: 0px; --en: 'Jost', sans-serif; --ease-page: cubic-bezier(.77, 0, .175, 1); margin-bottom: 70px; }
+.pv { --forest: #331e22; --brass: #a27d5c; --paper: #f6f2ec; --ink: #2b2426; --grey: #8c8385; --line: #e3ddd4; --hd: 0px; --en: 'Jost', sans-serif; }
+/* ── 3. UNIT PLAN (책장 넘김) ──────────────── */
+.sec-unit { background: var(--paper); }
+.unit { position: relative; height: 100%; }
+.book-wrap { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: var(--hd) 0 0; }
+.book {
+  /* 화면 높이에 맞춰 최대한 크게, 양옆 화살표 자리만 남김 */
+  --w: min(calc((100vh - var(--hd) - 64px) * 1.438), calc(100vw - 300px));
+  position: relative; width: var(--w); aspect-ratio: 1280 / 890;
+}
+.book-cap { display: flex; gap: 18px; align-items: baseline; font-size: 13px; color: var(--grey); }
+.book-cap__page { font-family: var(--en); font-size: 17px; font-weight: 600; color: var(--ink); font-variant-numeric: lining-nums; }
+
+/* 화면 양옆 화살표 — 책장은 휠과 이 버튼으로만 넘어감 */
+.bk-arrow {
+  position: absolute; top: calc(50% + var(--hd) / 2 - 20px); z-index: 5;
+  width: 68px; height: 68px; margin-top: -34px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid #BDBFB8; background: rgba(255, 255, 255, .6); color: var(--ink);
+  transition: background-color .35s, color .35s, border-color .35s, opacity .35s, transform .35s var(--ease-out);
+}
+.bk-arrow svg { width: 26px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+.bk-arrow--prev { left: 3.65vw; }
+.bk-arrow--next { right: calc(3.65vw + 44px); }
+.bk-arrow:hover:not(:disabled) { background: var(--forest); border-color: var(--forest); color: #fff; }
+.bk-arrow--prev:hover:not(:disabled) { transform: translateX(-4px); }
+.bk-arrow--next:hover:not(:disabled) { transform: translateX(4px); }
+.bk-arrow:disabled { opacity: .25; cursor: default; }
+
+/* 평면 영역 (누르면 상세 보기) */
+.hot { position: absolute; left: 1.5%; right: 1.5%; z-index: 3; cursor: zoom-in; border-radius: 2px; transition: background-color .3s, box-shadow .3s; }
+.hot span {
+  position: absolute; right: 10px; top: 10px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; background: var(--forest); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap;
+  opacity: 0; transform: translateY(-4px); transition: opacity .3s, transform .3s var(--ease-out);
+}
+.hot span::before { content: "+"; font-size: 15px; line-height: 1; }
+.hot:hover, .hot:focus-visible { background: rgba(15, 42, 33, .05); box-shadow: inset 0 0 0 2px var(--brass); outline: none; }
+.hot:hover span, .hot:focus-visible span { opacity: 1; transform: none; }
+.leaf.is-turning .hot { pointer-events: none; }
+.book__stage { position: absolute; inset: 0; perspective: 2800px; transition: transform 1s var(--ease-page); }
+.book.is-closed .book__stage { transform: translateX(-25%); }
+
+/* 책 바닥면(왼쪽·오른쪽 속지)과 쌓인 종이 두께 */
+.book__base { position: absolute; top: 0; bottom: 0; width: 50%; background: #FBFBF8; }
+.book__base--l { left: 0; box-shadow: -1px 0 0 #fff, -3px 1px 0 #E6E4DD, -4px 1px 0 #fff, -6px 2px 0 #DCDAD2, -10px 12px 28px rgba(15, 42, 33, .22); transition: opacity .4s .5s; }
+.book__base--r { left: 50%; box-shadow: 1px 0 0 #fff, 3px 1px 0 #E6E4DD, 4px 1px 0 #fff, 6px 2px 0 #DCDAD2, 10px 12px 28px rgba(15, 42, 33, .22); }
+.book.is-closed .book__base--l { opacity: 0; transition-delay: 0s; }
+.book__base--r, .endpaper { background: #E9E6DC url(../images/pattern-light.png); }
+.endpaper { position: absolute; inset: 0; display: grid; place-items: center; }
+.endpaper__emblem { width: 22%; max-width: 140px; height: auto; opacity: .5; }
+
+.leaf {
+  position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
+  transform-origin: 0 50%; transform-style: preserve-3d;
+  transition: transform 1.1s cubic-bezier(.645, .045, .355, 1);
+}
+.leaf.is-flipped { transform: rotateY(-180deg); }
+.face { position: absolute; inset: 0; overflow: hidden; background: #fff; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face--back { transform: rotateY(180deg); }
+/* 면마다 독립된 층으로 묶어야 뒤집힌 면의 평면 버튼·음영이 반대쪽 면 위로 비치거나 클릭을 가로채지 않음 */
+.face { isolation: isolate; }
+.leaf.is-flipped .face--front, .leaf:not(.is-flipped) .face--back { pointer-events: none; }
+.face img { width: 100%; height: 100%; object-fit: cover; }
+/* 제본선 쪽 음영 */
+.face::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.face--front::after { background: linear-gradient(90deg, rgba(0,0,0,.2), rgba(0,0,0,.05) 5%, rgba(0,0,0,0) 12%, rgba(0,0,0,0) 96%, rgba(0,0,0,.06)); }
+.face--back::after { background: linear-gradient(270deg, rgba(0,0,0,.2), rgba(0,0,0,.05) 5%, rgba(0,0,0,0) 12%, rgba(0,0,0,0) 96%, rgba(0,0,0,.06)); }
+/* 넘어가는 동안 종이가 들리며 생기는 그림자 */
+.face::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; }
+.face--front::before { background: linear-gradient(90deg, rgba(0,0,0,.05), rgba(0,0,0,.45)); }
+.face--back::before { background: linear-gradient(270deg, rgba(0,0,0,.05), rgba(0,0,0,.45)); }
+.leaf.is-turning .face--front::before { animation: shadeOut 1.1s cubic-bezier(.645, .045, .355, 1) both; }
+.leaf.is-turning .face--back::before { animation: shadeIn 1.1s cubic-bezier(.645, .045, .355, 1) both; }
+.leaf.is-turning.is-back .face--front::before { animation-name: shadeIn; }
+.leaf.is-turning.is-back .face--back::before { animation-name: shadeOut; }
+@keyframes shadeOut { 0% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@keyframes shadeIn { 0%, 50% { opacity: 1; } 100% { opacity: 0; } }
+.leaf.is-turning .face { box-shadow: 0 0 40px rgba(0, 0, 0, .18); }
+
+/* 표지 */
+.cover {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: var(--forest) url(../images/pattern-dark.png) center / 120px; color: #fff; text-align: center;
+}
+.cover::before { content: ""; position: absolute; inset: 5%; border: 1px solid rgba(184, 154, 98, .6); }
+.face .cover__brand { position: relative; width: 44%; height: auto; margin-bottom: 7%; object-fit: contain; }
+.cover__en { font-family: var(--en); font-weight: 500; font-size: clamp(30px, 3vw, 58px); letter-spacing: .08em; line-height: 1; }
+.cover__ko { font-size: clamp(14px, 1.05vw, 19px); letter-spacing: -.02em; opacity: .85; }
+.cover__num { margin-top: 8%; font-family: var(--en); font-size: 15px; letter-spacing: .3em; color: #E8D9A8; font-variant-numeric: lining-nums; }
+
+/* 마지막 쪽 (방문 예약 안내) */
+.endpage { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 12%; background: #FBFBF8; }
+.endpage__en { font-family: var(--en); font-weight: 600; font-size: 14px; letter-spacing: .2em; color: var(--brass); }
+.endpage__t { font-size: clamp(20px, 1.7vw, 32px); font-weight: 600; letter-spacing: -.05em; line-height: 1.35; }
+.endpage__d { font-size: 15px; color: var(--grey); }
+.endpage a.endpage__btn { justify-self: start; align-self: flex-start; margin-top: 10px; padding: 14px 26px; background: var(--forest); color: #fff; font-weight: 600; transition: background-color .3s; }
+.endpage a.endpage__btn:hover { background: var(--brass); }
+
+/* 한 쪽씩 보기 (모바일) */
+.book.is-single { aspect-ratio: 640 / 890; overflow: hidden; }
+.book.is-single .book__stage { transform: none; }
+.book.is-single .book__base--l { display: none; }
+.book.is-single .book__base--r { left: 0; width: 100%; box-shadow: 3px 1px 0 #E6E4DD, 6px 2px 0 #DCDAD2, 0 12px 28px rgba(15, 42, 33, .2); }
+.book.is-single .leaf { left: 0; width: 100%; transition: transform 1.1s cubic-bezier(.645, .045, .355, 1), visibility 0s; }
+.book.is-single .leaf.is-flipped { visibility: hidden; transition: transform 1.1s cubic-bezier(.645, .045, .355, 1), visibility 0s 1.1s; }
+
+/* ── 주택형 상세 보기 (평면 확대) ─────────── */
+.pv { position: fixed; inset: 0; z-index: 120; }
+.pv[hidden] { display: none; }
+.pv__bg { position: absolute; inset: 0; background: rgba(243, 244, 240, .99); }
+.pv__stage { position: absolute; top: 112px; bottom: 56px; left: 130px; right: 130px; }
+.pv__img { position: fixed; background: #fff; box-shadow: 0 30px 80px rgba(15, 42, 33, .16); transform-origin: 0 0; will-change: transform, opacity; }
+.pv__head { position: absolute; left: 3.65vw; top: 26px; right: 120px; display: flex; align-items: baseline; gap: 18px; }
+.pv__en { font-family: var(--en); font-weight: 600; font-size: 13px; letter-spacing: .2em; color: var(--brass); }
+.pv__title { font-family: var(--en); font-weight: 500; font-size: 56px; line-height: 1; letter-spacing: .01em; font-variant-numeric: lining-nums; }
+.pv__count { font-family: var(--en); font-size: 17px; color: var(--grey); font-variant-numeric: lining-nums; }
+.pv__count strong { color: var(--ink); font-weight: 600; }
+.pv__nav {
+  position: absolute; top: calc(50% + 28px); width: 64px; height: 64px; margin-top: -32px; border-radius: 50%;
+  display: grid; place-items: center; border: 1px solid #BDBFB8; background: #fff;
+  transition: background-color .3s, color .3s, border-color .3s;
+}
+.pv__nav svg { width: 24px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+.pv__nav--prev { left: 3.65vw; }
+.pv__nav--next { right: 3.65vw; }
+.pv__nav:hover { background: var(--forest); color: #fff; border-color: var(--forest); }
+.pv__close { position: absolute; right: 3.65vw; top: 22px; width: 52px; height: 52px; border-radius: 50%; background: var(--forest); transition: background-color .3s, transform .4s var(--ease-out); }
+.pv__close::before, .pv__close::after { content: ""; position: absolute; left: 15px; top: 25px; width: 22px; height: 1.5px; background: #fff; }
+.pv__close::before { transform: rotate(45deg); }
+.pv__close::after { transform: rotate(-45deg); }
+.pv__close:hover { background: var(--brass); transform: rotate(90deg); }
+.pv__note { position: absolute; left: 0; right: 0; bottom: 20px; text-align: center; font-size: 12px; color: var(--grey); }
+/* 열릴 때 머리글·버튼은 확대가 거의 끝날 즈음 나타남 */
+.pv__head, .pv__nav, .pv__close, .pv__note { transition: opacity .4s; }
+.pv.is-entering .pv__head, .pv.is-entering .pv__nav, .pv.is-entering .pv__close, .pv.is-entering .pv__note,
+.pv.is-leaving .pv__head, .pv.is-leaving .pv__nav, .pv.is-leaving .pv__close, .pv.is-leaving .pv__note { opacity: 0; }
+
+
+/* 하위 페이지 안에서 쓰도록 크기·배치 재조정 */
+.ubook .unit { position: relative; height: auto; padding: 0 76px; }
+.ubook .book-wrap { height: auto; padding: 0; }
+.ubook .book { --w: 100%; width: 100%; }
+.ubook .bk-arrow { top: calc(50% - 20px); width: 56px; height: 56px; margin-top: -28px; background: #fff; }
+.ubook .bk-arrow--prev { left: 0; }
+.ubook .bk-arrow--next { right: 0; }
+.ubook .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.ubook .book-cap { justify-content: center; margin-top: 16px; }
+.pv { z-index: 400; }
+.pv__stage { top: 112px; }
+@media (max-width: 767px) {
+  .ubook .unit { padding: 0 44px; }
+  .ubook .bk-arrow { width: 40px; height: 40px; margin-top: -20px; }
+  .ubook .bk-arrow svg { width: 16px; }
+  .hot span { opacity: 1; transform: none; right: 6px; top: 6px; padding: 4px 8px; font-size: 11px; }
+  .pv__stage { top: 84px; bottom: 90px; left: 12px; right: 12px; }
+  .pv__head { left: 16px; top: 20px; right: 80px; gap: 12px; }
+  .pv__title { font-size: 40px; }
+  .pv__close { right: 14px; top: 16px; }
+  .pv__nav { top: auto; bottom: 26px; margin-top: 0; width: 52px; height: 52px; }
+  .pv__nav--prev { left: calc(50% - 64px); }
+  .pv__nav--next { right: calc(50% - 64px); }
+}
+/* 닫기 버튼: 글자 + ESC 안내가 보이는 알약 모양 */
+.pv .pv__close { width: auto; height: 48px; padding: 0 20px 0 46px; border-radius: 24px; color: #fff; font-size: 14px; font-weight: 600; }
+.pv .pv__close::before, .pv .pv__close::after { left: 18px; top: 23px; width: 16px; height: 1.5px; }
+.pv .pv__close:hover { transform: none; }
+.pv__close-txt kbd { margin-left: 6px; padding: 2px 6px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 4px; font: 600 11px/1 var(--en); }
+
+/* ── 전체화면 책 모드 ── */
+.ubook.is-full { position: fixed; inset: 0; z-index: 300; margin: 0; display: flex; flex-direction: column; justify-content: center; background: #f6f2ec url(../images/pattern-light.png); }
+.ubook.is-full .unit { width: 100%; padding: 0 110px; }
+.ubook.is-full .book { width: min(calc((100vh - 170px) * 1.438), calc(100vw - 240px)); margin: 0 auto; }
+.ubook.is-full .bk-arrow { width: 64px; height: 64px; margin-top: -32px; }
+.ubook.is-full .bk-arrow--prev { left: 28px; }
+.ubook.is-full .bk-arrow--next { right: 28px; }
+.ub-exit { display: none; position: absolute; right: 28px; top: 22px; z-index: 5; height: 48px; padding: 0 20px 0 44px; border-radius: 24px; background: #331e22; color: #fff; font-size: 14px; font-weight: 600; transition: background-color .3s; }
+.ub-exit:hover { background: #a27d5c; }
+.ub-exit__x::before, .ub-exit__x::after { content: ""; position: absolute; left: 18px; top: 23px; width: 16px; height: 1.5px; background: #fff; }
+.ub-exit__x::before { transform: rotate(45deg); }
+.ub-exit__x::after { transform: rotate(-45deg); }
+.ub-exit kbd { margin-left: 6px; padding: 2px 6px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 4px; font: 600 11px/1 'Jost', sans-serif; }
+.ubook.is-full .ub-exit { display: block; animation: fade .6s .7s both; }
+.ub-open { margin-left: 18px; padding: 8px 16px; border: 1px solid #331e22; border-radius: 18px; font-size: 13px; font-weight: 600; color: #331e22; transition: background-color .3s, color .3s; }
+.ub-open:hover { background: #331e22; color: #fff; }
+.ubook.is-full .ub-open { display: none; }
+@media (max-width: 767px) {
+  .ubook.is-full .unit { padding: 0 44px; }
+  .ubook.is-full .book { width: calc(100vw - 100px); }
+  .ubook.is-full .bk-arrow { width: 40px; height: 40px; margin-top: -20px; }
+  .ubook.is-full .bk-arrow--prev { left: 4px; }
+  .ubook.is-full .bk-arrow--next { right: 4px; }
+  .ub-exit { right: 12px; top: 12px; }
+}

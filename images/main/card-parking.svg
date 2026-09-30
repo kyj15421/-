@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 329 221" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b9bbbb"/><stop offset=".22" stop-color="#eeeeef"/><stop offset=".5" stop-color="#f7f7f7"/><stop offset=".78" stop-color="#eeeeef"/><stop offset="1" stop-color="#b9bbbb"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b2c30"/><stop offset="1" stop-color="#45464c"/>
+    </linearGradient>
+    <marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0 0.6L5 3 0 5.4z" fill="#d9d9d9"/>
+    </marker>
+    <!-- 위에서 내려다본 SUV (길이 100 기준) -->
+    <g id="car">
+      <ellipse cx="0" cy="3" rx="21" ry="52" fill="#000" opacity=".28"/>
+      <rect x="-19" y="-50" width="38" height="100" rx="13" fill="url(#body)"/>
+      <path d="M-15 -44 Q0 -50 15 -44 L14 -28 Q0 -31 -14 -28 Z" fill="#dcdcdd"/>
+      <path d="M-14 -24 Q0 -29 14 -24 L12 -9 Q0 -12 -12 -9 Z" fill="url(#glass)"/>
+      <rect x="-12.5" y="-8" width="25" height="32" rx="5" fill="#e9e9ea"/>
+      <path d="M-12 26 Q0 24 12 26 L11 36 Q0 38 -11 36 Z" fill="url(#glass)"/>
+      <path d="M-18 -10 L-15 -8 L-15 24 L-18 26 Z M18 -10 L15 -8 L15 24 L18 26 Z" fill="#3a3b40" opacity=".55"/>
+      <rect x="-24" y="-20" width="6" height="4" rx="2" fill="#cfd0d0"/><rect x="18" y="-20" width="6" height="4" rx="2" fill="#cfd0d0"/>
+      <path d="M-17 43 Q-14 49 -7 49.5 L-7 46 Q-13 45.5 -16 40 Z M17 43 Q14 49 7 49.5 L7 46 Q13 45.5 16 40 Z" fill="#c8283a"/>
+      <path d="M-16 -45 Q-13 -49 -8 -49.5 L-8 -47 Q-12 -46.5 -14 -43 Z M16 -45 Q13 -49 8 -49.5 L8 -47 Q12 -46.5 14 -43 Z" fill="#fff6e0"/>
+    </g>
+  </defs>
+  <rect width="329" height="221" fill="#58585a"/>
+  <g fill="none" stroke="#d9d9d9" stroke-width="1">
+    <path d="M69 60 H133" marker-end="url(#ar)"/><path d="M69 57 V195" marker-end="url(#ar)"/>
+    <path d="M194 50 H264" marker-end="url(#ar)"/><path d="M194 47 V200" marker-end="url(#ar)"/>
+  </g>
+  <g fill="#e6e6e6" font-family="Arial, Helvetica, sans-serif" font-size="9.5">
+    <text x="101" y="49" text-anchor="middle">2.5m</text>
+    <text x="229" y="39" text-anchor="middle">2.6m</text>
+    <text x="61" y="130" text-anchor="middle" transform="rotate(-90 61 130)">5m</text>
+    <text x="186" y="127" text-anchor="middle" transform="rotate(-90 186 127)">5.2m</text>
+  </g>
+  <use href="#car" transform="translate(104 131) scale(.98)"/>
+  <use href="#car" transform="translate(228 128) scale(1.02)"/>
+</svg>
