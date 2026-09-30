@@ -106,6 +106,7 @@ ul, ol { list-style: none; }
 .hd__bar { width: 1px; height: 14px; background: currentColor; opacity: .3; }
 .hd__tel { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; letter-spacing: .01em; }
 .hd__tel svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+.hd__call { display: none; }
 .hd__menu { position: relative; width: 44px; height: 44px; margin-left: 26px; margin-right: -10px; }
 .hd__menu i { position: absolute; right: 10px; height: 2px; background: currentColor; transition: width .3s var(--ease); }
 .hd__menu i:nth-child(2) { top: 14px; width: 20px; }
@@ -468,7 +469,12 @@ html:not(.js) .premium__tit, html:not(.js) .premium__viewport { opacity: 1; tran
   .hd.is-solid { background: rgba(255, 255, 255, .96); color: var(--brown-2); box-shadow: 0 1px 0 rgba(0, 0, 0, .06); }
   .hd.is-solid .logo--color { display: flex; } .hd.is-solid .logo--white { display: none; }
   .gnb, .hd__yt, .hd__bar { display: none; }
-  .hd__tel { font-size: 14px; gap: 5px; }
+  /* 대표번호: 와인색 버튼, 누르면 바로 전화 연결 (PC용 번호 글자는 숨김) */
+  .hd__tel { display: none; }
+  .hd__call { position: relative; display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-radius: 9px; background: var(--wine-2); color: #fff; font-size: 14px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; box-shadow: 0 3px 10px rgba(60, 10, 20, .22); transition: background-color .2s, transform .2s; }
+  .hd__call::after { content: ""; position: absolute; inset: -4px 0; } /* 누르는 영역 44px 확보 */
+  .hd__call:active { background: var(--wine); transform: scale(.97); }
+  .hd__call svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; }
   .hd__menu { margin-left: 8px; }
   .side { top: auto; bottom: 0; left: 0; right: 0; transform: none; }
   .side__tab { border-radius: 0; border: 0; box-shadow: 0 -4px 16px rgba(60, 10, 20, .25); gap: 10px; }
@@ -567,8 +573,8 @@ input[type="date"] { cursor: pointer; }
   .logo img:first-child { height: 17px; }
   .logo img:last-child { height: 12px; }
   .hd__util { gap: 12px; }
-  .hd__tel { white-space: nowrap; font-size: 13px; }
-  .hd__tel svg { width: 13px; height: 13px; }
+  .hd__call { height: 34px; padding: 0 11px; font-size: 13px; gap: 5px; }
+  .hd__call svg { width: 13px; height: 13px; }
   .hd__menu { margin-left: 0; }
   /* 메인 비주얼: 슬라이드 조작부와 안내 문구 겹침 해결 */
   .ctrl--main { bottom: 120px; }
@@ -581,7 +587,15 @@ input[type="date"] { cursor: pointer; }
   .park__zoom { right: 8px; bottom: 8px; padding: 7px 12px; font-size: 12px; }
 }
 @media (max-width: 380px) {
-  .hd__tel span { display: none; }
+  .hd { padding: 0 14px; gap: 8px; }
+  .hd__util { gap: 8px; }
+  .hd__call { padding: 0 9px; font-size: 12.5px; gap: 4px; }
+}
+@media (max-width: 340px) {
+  .hd { padding: 0 12px; }
+  .logo img:first-child { height: 14px; }
+  .logo img:last-child { height: 10px; }
+  .hd__call { padding: 0 8px; font-size: 12px; }
 }
 @media (max-width: 1023px) {
   .ctrl__dots { gap: 6px; }
