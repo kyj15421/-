@@ -137,17 +137,18 @@
       idx = (idx - 1 + total) % total; setNum();
       setTimeout(done, reduce ? 0 : 1500);
     }
-    function schedule() {
-      clearInterval(timer);
-      if (active && !hover && !reduce) timer = setInterval(() => { if (!moving) next(); }, 7000);
+    // 도착 직후 첫 카드는 3초 뒤, 그다음부터는 7초마다 넘어감
+    function schedule(wait = 7000) {
+      clearTimeout(timer);
+      if (!active || hover || reduce) return;
+      timer = setTimeout(() => { if (!moving) next(); schedule(); }, wait);
     }
     document.querySelector(".premium__next").addEventListener("click", () => { next(); schedule(); });
     document.querySelector(".premium__prev").addEventListener("click", () => { prev(); schedule(); });
     const vp = track.parentElement;
-    vp.addEventListener("mouseenter", () => { hover = true; schedule(); });
-    vp.addEventListener("mouseleave", () => { hover = false; schedule(); });
-    vp.addEventListener("focusin", () => { hover = true; schedule(); });
-    vp.addEventListener("focusout", () => { hover = false; schedule(); });
+    // 마우스를 실제로 올렸을 때만 멈춤 (터치는 '올림' 상태가 풀리지 않아 자동 넘김이 멈추므로 제외)
+    vp.addEventListener("pointerenter", (e) => { if (e.pointerType !== "mouse") return; hover = true; schedule(); });
+    vp.addEventListener("pointerleave", (e) => { if (e.pointerType !== "mouse") return; hover = false; schedule(); });
     let sx = null;
     vp.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; }, { passive: true });
     vp.addEventListener("touchend", (e) => {
@@ -155,7 +156,11 @@
       const dx = sx - e.changedTouches[0].clientX; sx = null;
       if (Math.abs(dx) > 40) { dx > 0 ? next() : prev(); schedule(); }
     });
-    return { start() { active = true; schedule(); }, stop() { active = false; schedule(); } };
+    return {
+      // 화면이 넘어오는 동안 커서가 카드 자리에 놓여 있던 것은 '올림'으로 치지 않음
+      start() { if (active) return; active = true; hover = false; schedule(3000); },
+      stop() { active = false; schedule(); },
+    };
   })();
 
   /* ── 홍보영상 ── */
