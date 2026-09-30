@@ -11,6 +11,12 @@ const GUEST_FORMSPREE_ID = "xdekbjpe";
   const $ = (s) => form.querySelector(s);
   const summary = document.getElementById("g-summary");
   const done = document.getElementById("g-done");
+  // 일정변경: 새 등록과 구분되도록 메일 제목을 [일정변경]으로 바꾸고 이전 일정을 함께 보냄
+  const subject = $('[name="_subject"]');
+  const prevField = Object.assign(document.createElement("input"), { type: "hidden", name: "이전 방문일정", disabled: true });
+  form.prepend(prevField);
+  let changing = false, booked = "";
+  const submitLabel = () => changing ? "일정 변경하기" : "등록하기";
 
   /* 주소: 광주 구 → 동 */
   const DONG = {
@@ -69,7 +75,7 @@ const GUEST_FORMSPREE_ID = "xdekbjpe";
       return;
     }
     summary.hidden = true;
-    const btn = $(".g-submit");
+    const btn = $(".gf__submit-wrap .g-submit");
     btn.disabled = true; btn.textContent = "등록 중…";
     try {
       if (GUEST_FORMSPREE_ID) {
@@ -80,15 +86,26 @@ const GUEST_FORMSPREE_ID = "xdekbjpe";
       }
       document.getElementById("g-done-name").textContent = $("#g-name").value.trim();
       const vd = $("#g-date").value, vt = $("#g-time").value;
-      document.getElementById("g-done-visit").textContent = vd ? `방문 예약: ${Number(vd.slice(5, 7))}월 ${Number(vd.slice(8))}일 ${vt} · 담당자가 전화로 확정해 드립니다.` : "";
+      booked = vd ? `${Number(vd.slice(5, 7))}월 ${Number(vd.slice(8))}일 ${vt}` : "";
+      document.getElementById("g-done-title").textContent = changing ? "방문 일정이 변경 접수되었습니다" : "관심고객으로 등록되었습니다";
+      document.getElementById("g-done-visit").textContent = vd ? `방문 예약: ${booked} · 담당자가 전화로 확정해 드립니다.` : "";
       form.hidden = true; done.hidden = false; done.focus();
       done.scrollIntoView({ block: "center" });
     } catch (err) {
       summary.textContent = "등록하지 못했습니다. 인터넷 연결을 확인하고 다시 시도하거나 1668-4480으로 문의해 주세요.";
       summary.hidden = false; summary.focus();
     } finally {
-      btn.disabled = false; btn.textContent = "등록하기";
+      btn.disabled = false; btn.textContent = submitLabel();
     }
+  });
+  // 일정변경하기: 입력 내용은 그대로 두고 방문일정만 다시 고르게 함
+  document.getElementById("g-change").addEventListener("click", () => {
+    changing = true;
+    subject.value = subject.value.replace("[관심고객등록]", "[일정변경]");
+    prevField.disabled = false; prevField.value = booked || "없음";
+    $(".gf__submit-wrap .g-submit").textContent = submitLabel();
+    done.hidden = true; form.hidden = false;
+    $("#g-date").scrollIntoView({ block: "center" }); $("#g-date").focus({ preventScroll: true });
   });
   summary.addEventListener("click", (e) => {
     const a = e.target.closest("[data-f]");

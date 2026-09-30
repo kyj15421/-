@@ -15,6 +15,13 @@ const FORMSPREE_ID = "xdekbjpe";
   const nameInput = document.getElementById("name");
   const phoneInput = document.getElementById("phone");
   const dateInput = document.getElementById("date");
+  const button = form.querySelector(".form__submit");
+  // 일정변경: 새 예약과 구분되도록 메일 제목을 [일정변경]으로 바꾸고 이전 일정을 함께 보냄
+  const subject = form.querySelector('[name="_subject"]');
+  const prevField = Object.assign(document.createElement("input"), { type: "hidden", name: "이전 예약", disabled: true });
+  form.prepend(prevField);
+  let changing = false, booked = "";
+  const submitLabel = () => changing ? "변경한 일정으로 접수하기" : "방문 예약하기";
 
   const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
   const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
@@ -64,8 +71,7 @@ const FORMSPREE_ID = "xdekbjpe";
       return;
     }
     summary.hidden = true;
-    const button = form.querySelector(".form__submit");
-    button.disabled = true; button.textContent = "예약 접수 중…";
+    button.disabled = true; button.textContent = changing ? "일정 변경 접수 중…" : "예약 접수 중…";
     try {
       if (FORMSPREE_ID) {
         const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
@@ -75,13 +81,15 @@ const FORMSPREE_ID = "xdekbjpe";
         await new Promise((r) => setTimeout(r, 600));
       }
       const [, m, d] = dateInput.value.split("-");
-      document.getElementById("done-text").textContent = `${nameInput.value.trim()}님, ${Number(m)}월 ${Number(d)}일 ${form.time.value} 방문으로 신청하셨습니다.`;
+      booked = `${Number(m)}월 ${Number(d)}일 ${form.time.value}`;
+      document.getElementById("done-title").textContent = changing ? "방문 일정이 변경 접수되었습니다" : "방문 예약이 접수되었습니다";
+      document.getElementById("done-text").textContent = `${nameInput.value.trim()}님, ${booked} 방문으로 ${changing ? "변경 " : ""}신청하셨습니다.`;
       form.hidden = true; done.hidden = false; done.focus();
     } catch (err) {
       summary.textContent = "예약을 접수하지 못했습니다. 인터넷 연결을 확인하고 다시 시도하거나, 1668-4480로 전화 주세요.";
       summary.hidden = false; summary.focus();
     } finally {
-      button.disabled = false; button.textContent = "방문 예약하기";
+      button.disabled = false; button.textContent = submitLabel();
     }
   });
   summary.addEventListener("click", (e) => {
@@ -90,6 +98,12 @@ const FORMSPREE_ID = "xdekbjpe";
     e.preventDefault(); e.stopPropagation();
     target[a.dataset.key]().focus();
   });
-  // 이어서 관람하기: 창은 main.js(data-close)가 닫고, 여기서는 다음 예약을 위해 폼을 처음 상태로 되돌림
-  document.getElementById("reserve-again").addEventListener("click", () => { form.reset(); done.hidden = true; form.hidden = false; });
+  // 일정변경하기: 입력한 이름·연락처는 그대로 두고 날짜·시간만 다시 고르게 함
+  document.getElementById("reserve-change").addEventListener("click", () => {
+    changing = true;
+    subject.value = subject.value.replace("[방문예약]", "[일정변경]");
+    prevField.disabled = false; prevField.value = booked;
+    button.textContent = submitLabel();
+    done.hidden = true; form.hidden = false; dateInput.focus();
+  });
 })();

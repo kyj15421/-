@@ -453,7 +453,7 @@ html:not(.js) .premium__tit, html:not(.js) .premium__viewport { opacity: 1; tran
 .done__text { font-size: 17px; }
 .done p:last-of-type { color: #888; }
 .done__acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
-.done__again { padding: 13px 22px; border: 1px solid var(--brown-2); font-weight: 600; transition: background-color .2s, color .2s, border-color .2s; }
+.done__again { display: inline-flex; align-items: center; justify-content: center; padding: 13px 22px; border: 1px solid var(--brown-2); font-weight: 600; transition: background-color .2s, color .2s, border-color .2s; }
 .done__again:hover { background: var(--brown-2); color: #fff; }
 .done__unit { background: var(--wine-2); border-color: var(--wine-2); color: #fff; }
 .done__unit:hover { background: var(--wine); border-color: var(--wine); }
@@ -540,6 +540,7 @@ html:not(.js) .premium__tit, html:not(.js) .premium__viewport { opacity: 1; tran
   .ft__r { align-items: stretch; }
   .family__bt, .ft__priv { width: 100%; }
   .rsv__panel { padding: 40px 22px 30px; }
+  .done__again { flex: 1 1 100%; }
 }
 @media (max-width: 599px) {
   .form__grid, .pr__list, .sign__list { grid-template-columns: 1fr; }
