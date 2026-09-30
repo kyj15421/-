@@ -100,7 +100,7 @@
   });
   const sliders = { main: Fade(document.getElementById("mv")), life: Fade(document.getElementById("lf")) };
 
-  /* ── HIGH END LIFE 카드 캐러셀 (무한 반복, 3.5초 자동) ── */
+  /* ── HIGH END LIFE 카드 캐러셀 (무한 반복, 2.5초 자동) ── */
   const premium = (() => {
     const track = document.getElementById("premium-track");
     const cards = [...track.children];
@@ -137,8 +137,8 @@
       idx = (idx - 1 + total) % total; setNum();
       setTimeout(done, reduce ? 0 : 1500);
     }
-    // 도착 직후 첫 카드는 3초 뒤, 그다음부터는 7초마다 넘어감
-    function schedule(wait = 7000) {
+    // 도착 직후 첫 카드는 1.5초 뒤, 그다음부터는 2.5초마다 넘어감
+    function schedule(wait = 2500) {
       clearTimeout(timer);
       if (!active || hover || reduce) return;
       timer = setTimeout(() => { if (!moving) next(); schedule(); }, wait);
@@ -158,7 +158,7 @@
     });
     return {
       // 화면이 넘어오는 동안 커서가 카드 자리에 놓여 있던 것은 '올림'으로 치지 않음
-      start() { if (active) return; active = true; hover = false; schedule(3000); },
+      start() { if (active) return; active = true; hover = false; schedule(1500); },
       stop() { active = false; schedule(); },
     };
   })();
