@@ -251,7 +251,7 @@ body.sub { background: #fff; color: #222; }
   .tbl--info th { width: 110px; padding: 14px; }
   .tbl--info td { padding: 14px; }
   .btn-round { min-width: 0; width: 100%; height: 56px; }
-  .sub .side { display: block; }
+  .sub .side { display: flex; }
 }
 @media (max-width: 599px) {
   .tabs--block > .tabs__list { gap: 6px; }
